@@ -1,18 +1,18 @@
-#parser
-#python main.py --product_id 1001028
+#Install libraries
+import subprocess
+import sys
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--product_id', dest='product_id', type=str, help='Add product_id')
-args = parser.parse_args()
+def install(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-#app 
-TEMPLATE = args.templates-folder
-STATIC = args.static-folder
+install("flask")
+install("flask-localtunnel")
 
+#app
 from flask import Flask, render_template
 from flask_lt import run_with_lt
 
-app = Flask(__name__,template_folder=TEMPLATE,static_folder=STATIC)
+app = Flask(__name__)
 run_with_lt(app)
 
 @app.route('/')
@@ -22,8 +22,6 @@ def home():
 if __name__ == '__main__':
    app.run()
 
-
-# !pip install Js2Py
 
 
 

@@ -5,21 +5,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hua - AI painting with Stable Diffusion - www.PaintHua.com</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="{{url_for('static', filename='apple-touch-icon.png')}}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static', filename='favicon-32x32.png')}}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{url_for('static', filename='favicon-16x16.png')}}">
-    <link rel="manifest" href="{url_for('static', filename='site.webmanifest')}}">
-    <link rel="mask-icon" href="{url_for('static', filename='safari-pinned-tab.svg')}}" color="#005678">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png')}}">
+    <link rel="manifest" href=" {{url_for('static', filename='site.webmanifest')}}">
+    <link rel="mask-icon" href=" {{url_for('static', filename='safari-pinned-tab.svg')}}" color="#005678">
     <meta name="msapplication-TileColor" content="#005678">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" href="{url_for('static', filename='css/normalize.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css')}}">
     <style>
         @font-face {
             font-family: 'Open Sans';
             font-style: normal;
             font-weight: 400;
             font-display: swap;
-            src: url("{url_for('static', filename='font/open_sans.woff2')}}") format('woff2');
+            src: url("{{ url_for('static', filename='font/open_sans.woff2')}}") format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
         }
 
@@ -28,7 +28,7 @@
             font-style: normal;
             font-weight: 400;
             font-display: swap;
-            src: url("{url_for('static', filename='font/jetbrains_mono.woff2')}}") format('woff2');
+            src: url("{{ url_for('static', filename='font/jetbrains_mono.woff2')}}") format('woff2');
             unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
         }
 
@@ -322,7 +322,7 @@
         <a id="save_canvas" class="hide"></a>
         <input type="file" id="imageLoader" class="hide" onclick="this.value=null;" />
     </div>
-    <script src="{url_for('static', filename='index.js')}}"> </script>
+    <script src="{{ url_for('static', filename='index.js')}}"> </script>
 </body>
 
 </html>
