@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hua - AI painting with Stable Diffusion - www.PaintHua.com</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png')}}">
+    <link rel="manifest" href=" {{url_for('static', filename='site.webmanifest')}}">
+    <link rel="mask-icon" href=" {{url_for('static', filename='safari-pinned-tab.svg')}}" color="#005678">
+    <meta name="msapplication-TileColor" content="#005678">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css')}}">
+    <style>
+        @font-face {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url("{{ url_for('static', filename='font/open_sans.woff2')}}") format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        @font-face {
+            font-family: 'JetBrains Mono';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url("{{ url_for('static', filename='font/jetbrains_mono.woff2')}}") format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.3;
+            -webkit-text-size-adjust: none;
+            -moz-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        @media (max-width: 1920px) {
+            html {
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 1500px) {
+            html {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 1350px) {
+            html {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            html {
+                font-size: 12.5px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            html {
+                font-size: 12px;
+            }
+        }
+
+        /****************************************************************************************/
+
+        a,
+        a:hover,
+        a:visited,
+        a:active {
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: 1px solid #bbb;
+        }
+
+        ul {
+            margin-block-start: 0.3em;
+            margin-block-end: 0.3em;
+            padding-inline-start: 1.3em;
+        }
+
+        ol {
+            margin-block-start: 0.3em;
+            margin-block-end: 0.3em;
+            padding-inline-start: 1em;
+        }
+
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        /****************************************************************************************/
+
+        #sketch {
+            height: 100%;
+            width: 100%;
+            display: block;
+            position: absolute;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+
+        #sketch canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .drawBox {
+            display: block;
+            cursor: crosshair;
+            border: 2px dashed black;
+            padding: 0.2em;
+            outline: none !important;
+            position: absolute;
+            overflow: hidden;
+            resize: none;
+            background: transparent;
+            font-weight: bold;
+            color: black;
+            text-shadow:
+                -2px -2px 0 #fff,
+                0 -2px 0 #fff,
+                2px -2px 0 #fff,
+                2px 0 0 #fff,
+                2px 2px 0 #fff,
+                0 2px 0 #fff,
+                -2px 2px 0 #fff,
+                -2px 0 0 #fff;
+        }
+
+        .border_dance {
+            background-image: linear-gradient(90deg, black 50%, transparent 50%), linear-gradient(90deg, black 50%, transparent 50%), linear-gradient(0deg, black 50%, transparent 50%), linear-gradient(0deg, black 50%, transparent 50%);
+            background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+            background-size: 15px 2px, 15px 2px, 2px 15px, 2px 15px;
+            background-position: left top, right bottom, left bottom, right top;
+            animation: border-dance 0.5s infinite linear;
+            border: 0px !important;
+        }
+
+        @keyframes border-dance {
+            0% {
+                background-position: left top, right bottom, left bottom, right top;
+            }
+
+            100% {
+                background-position: left 15px top, right 15px bottom, left bottom 15px, right top 15px;
+            }
+        }
+
+        .decision_box button:hover {
+            background: #ccc;
+        }
+
+        .decision_box button[data-id="box_confirm"]:hover {
+            background: #99e550;
+        }
+
+        .decision_box button[data-id="box_retry"]:hover {
+            background: #5fcde4;
+        }
+
+        .decision_box button[data-id="box_cancel"]:hover {
+            background: #d95763;
+        }
+
+        /****************************************************************************************/
+
+        #tools {
+            float: left;
+            z-index: 99;
+            position: fixed;
+        }
+
+        #tools button {
+            width: 2.3em;
+            height: 2.3em;
+            padding-top: 0.2em;
+            background: #fff;
+            display: block;
+            font-size: 130%;
+            line-height: 0.8;
+        }
+
+        #tools button span {
+            font-size: 60%;
+            font-weight: bold;
+            line-height: 0.9;
+            position: relative;
+        }
+
+        #tools button:hover {
+            background: #ccc !important;
+        }
+
+        #tools button.active {
+            background: #dfd;
+        }
+
+        #tools button.active:hover {
+            background: #8f8 !important;
+        }
+
+        #help {
+            background: #fff;
+            width: 50em;
+            display: block;
+            border: 1px solid #bbb;
+            padding: 0.5em;
+            line-height: 1.5;
+        }
+
+        #prompt,
+        #config {
+            width: 50em;
+            height: 20em;
+            font-family: 'JetBrains Mono', monospace;
+            display: block;
+            line-height: 1.5;
+            padding: 0.5em;
+        }
+
+        #config {
+            height: 10em;
+        }
+
+        #error {
+            z-index: 999;
+            position: fixed;
+            display: block;
+            text-align: center;
+            padding: 0.5em;
+            top: 1em;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border: 1px solid #bbb;
+            background-color: #dfd;
+        }
+
+        #palette {
+            width: 10em;
+            line-height: 0;
+        }
+
+        #palette span {
+            width: 2.5em;
+            height: 2.5em;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        #palette span:hover {
+            border: 3px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error" class="hide">
+        <span id="error_msg"></span>
+        <button type="button" style="width: 2em; float:right; margin-left: 2em;" data-id="error_close">❌</button>
+    </div>
+    <div id="tools">
+        <div style="float: left;">
+            <button type="button" data-id="prompt_show">📜<br><span>Prompt</span></button>
+            <button type="button" data-id="mask_draw">🌗<span>Mask</span></button>
+            <button type="button" data-id="mask_show"><span style="top: -0.4em;">show mask</span></button>
+            <button type="button" data-id="brush_draw" class="">🖌️<br><span>Brush</span></button>
+            <button type="button" data-id="palette_show" class="">🎨<br><span>Palette</span></button>
+            <button type="button" data-id="i2i_mode"><span style="top: -0.4em;">i2i mode</span></button>
+            <button type="button" data-id="img_redo">➡️<br><span>Ctrl+Y</span></button>
+            <button type="button" data-id="img_undo">⬅️<br><span>Ctrl+Z</span></button>
+            <button type="button" data-id="img_copy">✂️<br><span>Ctrl+C</span></button>
+            <button type="button" data-id="img_paste">📋<br><span>Ctrl+V</span></button>
+            <button type="button" data-id="img_load">📁<br><span>Ctrl+O</span></button>
+            <button type="button" data-id="img_save">💾<br><span>Ctrl+S</span></button>
+            <button type="button" data-id="grid_mode"><span style="top: -0.4em;">grid mode</span></button>
+            <button type="button" data-id="config_show">⚙️<br><span>Config</span></button>
+            <button type="button" data-id="help_show">❓<br><span>Help</span></button>
+        </div>
+        <div style="z-index: 99; position: absolute; margin-left: 3.2em">
+            <div id="help" class="hide"> </div>
+            <textarea id="prompt" class="hide"></textarea>
+            <div id="palette" class="hide"></div>
+            <textarea id="config" class="hide"></textarea>
+        </div>
+    </div>
+    <div id="sketch">
+        <a id="save_canvas" class="hide"></a>
+        <input type="file" id="imageLoader" class="hide" onclick="this.value=null;" />
+    </div>
+    <script defer src="{{ url_for('static', filename='index.js')}}"> </script>
+</body>
+
+</html>

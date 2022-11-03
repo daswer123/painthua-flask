@@ -18,7 +18,7 @@ run_with_lt(app)
 @app.route('/')
 
 def home():
-   return render_template('index.html')
+   return render_template('index-non-colab.html')
 if __name__ == '__main__':
    app.run()
 
