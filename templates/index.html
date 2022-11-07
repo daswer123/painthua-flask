@@ -350,14 +350,14 @@
     <script defer src="{{ url_for('static', filename='index.js')}}"></script>
     <script>
         let oldLink = window.localStorage.getItem("HUA_V1_CONFIG");
-        oldLink = JSON.parse(oldLink);
+        oldLink = await JSON.parse(oldLink);
         let newLink = "";
-        newLink = JSON.parse(newLink);
+        newLink = await JSON.parse(newLink);
 
         oldLink.server = newLink.server
 
-        newLink = JSON.stringify(oldLink);
-        const toLocalStorage = JSON.stringify(newLink);
+        newLink = await JSON.stringify(oldLink);
+        const toLocalStorage = await JSON.stringify(newLink);
 
         window.localStorage.setItem("HUA_V1_CONFIG", toLocalStorage);
 
