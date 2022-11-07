@@ -350,22 +350,15 @@
     <script defer src="{{ url_for('static', filename='index.js')}}"></script>
     <script>
         let oldLink = window.localStorage.getItem("HUA_V1_CONFIG");
+        if (oldLink == null) {
+            oldLink = `{"server":"127.0.0.1:7860","canvas_w":0,"canvas_h":0,"min_size":512,"seam_fix_radius":5}`
+        }
+        oldLink = oldLink.split(",")
 
-        console.log(1, oldLink);
+        let serverURL = '{"server":"https://twelve-mails-admire-104-198-55-112.loca.lt"}
 
-        oldLink = JSON.parse(oldLink);
-
-        console.log(2, oldLink);
-        let newLink = "";
-        newLink = JSON.parse(newLink);
-        console.log(3, newLink);
-
-        oldLink.server = newLink.server
-
-        newLink = JSON.stringify(oldLink);
-        console.log(4, newLink);
-        const toLocalStorage = JSON.stringify(newLink);
-        console.log(5, toLocalStorage);
+        oldLink[0] = serverURL;
+        let toLocalStorage = oldLink.join(",");
 
         window.localStorage.setItem("HUA_V1_CONFIG", toLocalStorage);
 
